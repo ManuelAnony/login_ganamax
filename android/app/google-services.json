@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "802563164625",
+    "project_id": "login-76c06",
+    "storage_bucket": "login-76c06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802563164625:android:39abb0b5e004d3da71b8f0",
+        "android_client_info": {
+          "package_name": "com.example.login_ganamax"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802563164625-6fldqtj9n96a63rc361olf08i270q8ss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO8gywjvLEkSjtc1GthEprzfwBBSVC27A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802563164625-6fldqtj9n96a63rc361olf08i270q8ss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,11 +25,12 @@ class RegistroApp extends State<Registro>{
 
   insertarDatos() async{
     try{
+      String hashedPassword = sha256.convert(utf8.encode(password.text)).toString();
       await firebase.collection('Usuarios').doc().set({
         "NombreUsuario": nombre.text,
         "IndentidadUsuario": identificacion.text,
         "EmailUsuario": email.text,
-        "passwordUsuario":password.text
+        "passwordUsuario":hashedPassword,
       });
       print ('Datos guardados');
     }catch(e){
@@ -55,7 +58,9 @@ class RegistroApp extends State<Registro>{
                       color: Color(0xEDFF0000)
                     ),
                   ),
-              ),Padding(padding: EdgeInsets.only(top: 10, left: 10,right: 10),
+              ),
+
+              Padding(padding: EdgeInsets.only(top: 10, left: 10,right: 10),
                   child: TextField(
                     controller: identificacion,
                     decoration: InputDecoration(
@@ -65,7 +70,9 @@ class RegistroApp extends State<Registro>{
                       color: Color(0xEDFF0000)
                     ),
                   ),
-              ),Padding(padding: EdgeInsets.only(top: 10, left: 10,right: 10),
+              ),
+
+              Padding(padding: EdgeInsets.only(top: 10, left: 10,right: 10),
                   child: TextField(
                     controller: email,
                     decoration: InputDecoration(
@@ -75,7 +82,9 @@ class RegistroApp extends State<Registro>{
                       color: Color(0xEDFF0000)
                     ),
                   ),
-              ),Padding(padding: EdgeInsets.only(top: 10, left: 10,right: 10),
+              ),
+
+              Padding(padding: EdgeInsets.only(top: 10, left: 10,right: 10),
                   child: TextField(
                     obscureText: _password,
                     controller: password,
@@ -102,6 +111,10 @@ class RegistroApp extends State<Registro>{
                       //Navigator.push(context, MaterialPageRoute(builder: (context) => Registro()));                  print('botón presionado');
                       //print(nombre.text);
                       insertarDatos();
+                      nombre.clear();
+                      identificacion.clear();
+                      email.clear();
+                      password.clear();
                     },
                     child: Text('Registrar'),
                 ),

@@ -1,11 +1,12 @@
 import 'dart:convert';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
-import 'package:login_ganamax/View/Inicio.dart';
-import 'package:login_ganamax/main.dart';
+
+import '../DTO/User.dart';
+import 'Home.dart';
+import 'HomeNoAdmin.dart';
 
 
 
@@ -16,38 +17,102 @@ class Login extends StatefulWidget{
 }
 
 class LoginApp extends State<Login>{
+  User objUser = User();
   bool _password = false;
-
+  bool validarC = true ;
   TextEditingController nombre = TextEditingController();
   TextEditingController password = TextEditingController();
 
   validarDatos() async{
     try{
-      String hashedPasswordUsuario = sha256.convert(utf8.encode(password.text)).toString();
+      String hashedPasswordUsuario = sha256.convert(utf8.encode(password.text)).toString();//crypto
         CollectionReference ref = FirebaseFirestore.instance.collection('Usuarios');
         QuerySnapshot usuario = await ref.get();
 
         if(usuario.docs.length !=0){
           //hace un recorrido por todos los documentos
           for(var cursor in usuario.docs){
-              if(cursor.get("NombreUsuario")== nombre.text && cursor.get("passwordUsuario") == hashedPasswordUsuario){
-                print('Acceso permitido');
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
-              }else{
-                //print('Usuario no encontrado');
-                if(cursor.get("EmailUsuario")== nombre.text && cursor.get("passwordUsuario") == hashedPasswordUsuario){
-                    print('Acceso permitido');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
+
+            if(cursor.get("NombreUsuario")== nombre.text || cursor.get("EmailUsuario")== nombre.text ){
+              print('usuario encontrado');
+              //mensaje("Datos correctos", "bienvenido");
+
+              if(cursor.get("passwordUsuario") == hashedPasswordUsuario){
+                validarC=true;
+                //mensaje("Datos correctos", "bienvenido");
+                if (cursor.get("Rol") == "Admin"){
+                  mensaje("Datos correctos", "bienvenido");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
+                }else {
+                  print("No Admin");
+                  mensaje("Datos correctos", "bienvenido");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => InicioNoAdmin()));
                 }
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
+                break;
+              }else{
+                mensaje("Contraseña incorrecta", "Intente de nuevo");
+                break;
               }
+            }else{
+              validarC=false;
+            }
+
+            /*if((cursor.get("NombreUsuario")== nombre.text) && (cursor.get("passwordUsuario") == hashedPasswordUsuario)){
+                validar=validarC;
+                print('Acceso permitido');
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
+                mensaje('Información', 'Bienvenido');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
+
+
+              }else{
+
+                //print('Usuario no encontrado');
+                if((cursor.get("EmailUsuario")== nombre.text) && (cursor.get("passwordUsuario") == hashedPasswordUsuario)){
+                  validar=validarC;
+                   print('Acceso permitido');
+                   mensaje('Información', 'Bienvenido');
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
+
+
+                   //Navigator.push(context, MaterialPageRoute(builder: (context) => Inicio()));
+                }
+              }*/
+          } //for end
+          if(validarC==false){
+            mensaje("Usuario incorrecta", "Intente de nuevo");
           }
         }else{
+
           print('no hay documentos en la colecion');
         }
 
     }catch(e){
+
       print('error en insert...........' + e.toString());
     }
+
+
+  }
+  validarRol(){
+
+
+  }
+  void mensaje(String titulo, String contenido){
+    showDialog(context: context, builder: (buildcontext){
+      return AlertDialog(
+        title: Text(titulo),
+        content: Text(contenido),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            child: Text('Aceptar', style: TextStyle(color: Colors.blueGrey),),
+          )
+        ],);
+    });
   }
 
   @override

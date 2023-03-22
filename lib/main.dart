@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'DTO/User.dart';
 import 'View/Registro.dart';
 import 'firebase_options.dart';
 import 'View/Login.dart';
@@ -29,7 +30,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeStart extends State<Home> {
-
+  User objUser = User();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,7 +50,7 @@ class HomeStart extends State<Home> {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-                  print('botón presionado');
+                  //print('botón presionado');
                 },
                 child: Text('Entrar'),
               ),
@@ -58,8 +59,8 @@ class HomeStart extends State<Home> {
               padding: EdgeInsets.only(top: 20, left: 10, right: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Registro()));
-                  print('botón presionado');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Registro(objUser)));
+                  //print('botón presionado');
                 },
                 child: Text('Registrar'),
               ),

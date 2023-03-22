@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:crypto/crypto.dart';
-
+import 'package:login_ganamax/DTO/User.dart';
 
 class Registro extends StatefulWidget{
+  final User cadena;
+  Registro(this.cadena);
   @override
   RegistroApp createState() => RegistroApp();
 }
@@ -31,19 +33,37 @@ class RegistroApp extends State<Registro>{
         "IndentidadUsuario": identificacion.text,
         "EmailUsuario": email.text,
         "passwordUsuario":hashedPassword,
+        "Rol":'Invitado',
+        "Estado":true,
       });
       print ('Datos guardados');
+      mensaje('Información', 'Registro correcto');
     }catch(e){
+      mensaje('Información', 'Registro incorrecto o error en el registro');
       print('error en insert...........' + e.toString());
     }
   }
-
+  void mensaje(String titulo, String contenido){
+      showDialog(context: context, builder: (buildcontext){
+        return AlertDialog(
+          title: Text(titulo),
+          content: Text(contenido),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text('Aceptar', style: TextStyle(color: Colors.blueGrey),),
+            )
+          ],);
+      });
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro de usuarios'),
-        backgroundColor: Colors.red,
+        title: Text('Registro de usuarios  ------>' +widget.cadena.nombre),
+        backgroundColor: Color(0xED00FF3C),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -52,10 +72,13 @@ class RegistroApp extends State<Registro>{
                   child: TextField(
                     controller: nombre,
                     decoration: InputDecoration(
-                      labelText: 'Nombre'
+                      labelText: 'Nombre',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
                     ),
                     style: TextStyle(
-                      color: Color(0xEDFF0000)
+                      color: Color(0xED83C936)
                     ),
                   ),
               ),
@@ -64,10 +87,13 @@ class RegistroApp extends State<Registro>{
                   child: TextField(
                     controller: identificacion,
                     decoration: InputDecoration(
-                      labelText: 'Identificacion'
+                      labelText: 'Identificacion',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
                     ),
                     style: TextStyle(
-                      color: Color(0xEDFF0000)
+                      color: Color(0xED83C936)
                     ),
                   ),
               ),
@@ -76,10 +102,13 @@ class RegistroApp extends State<Registro>{
                   child: TextField(
                     controller: email,
                     decoration: InputDecoration(
-                      labelText: 'Email'
+                      labelText: 'Email',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
                     ),
                     style: TextStyle(
-                      color: Color(0xEDFF0000)
+                      color: Color(0xED83C936)
                     ),
                   ),
               ),
@@ -90,6 +119,9 @@ class RegistroApp extends State<Registro>{
                     controller: password,
                     decoration: InputDecoration(
                       labelText: 'Password',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
                         suffixIcon: IconButton(
                             icon: Icon(_password ? Icons.visibility : Icons.visibility_off),
                             onPressed: () {
@@ -100,7 +132,7 @@ class RegistroApp extends State<Registro>{
                         )
                     ),
                     style: TextStyle(
-                      color: Color(0xEDFF0000)
+                      color: Color(0xED83C936)
                     ),
                   ),
               ),
